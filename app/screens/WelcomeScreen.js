@@ -1,23 +1,25 @@
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView, Pressable } from 'react-native';
 
+import text from '../config/text';
+import colors from '../config/colors';
 function WelcomeScreen(props) {
     return (
-        <SafeAreaView style={styles.background}>
+        <SafeAreaView style={styles.container}>
             <Pressable style ={styles.registerButton} title = "Register New Account" onPress={()=>console.log("Register Pressed")} >
-                <Text style = {styles.text} > Register </Text>
+                <Text style = {text.buttonText} > Register </Text>
             </Pressable>
             <Pressable style ={styles.loginButton} title = "Login" onPress={()=>console.log("Login Pressed")} >
-                <Text style = {styles.text} > Login </Text>
+                <Text style = {text.buttonText} > Login </Text>
             </Pressable>
         </SafeAreaView>
         );
 }
 
 const styles = StyleSheet.create({
-    background: {
+    container: {
         flex: 1,
-        backgroundColor: "#fed9b7",
+        backgroundColor: colors.background1,
         justifyContent: "flex-end",
         alignItems: 'center'
     },
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         width: "70%",
         height: 70,
-        backgroundColor: "#00afb9",
+        backgroundColor: colors.primary,
     },
     loginButton: {
         alignItems: 'center',
@@ -37,16 +39,9 @@ const styles = StyleSheet.create({
         elevation: 3,
         width: "70%",
         height: 70,
-        backgroundColor: "#0081a7",
+        backgroundColor: colors.secondary,
         marginTop : 20
     },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-      }
 })
 
 export default WelcomeScreen;
