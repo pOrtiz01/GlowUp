@@ -1,9 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, SafeAreaView, View,Image,Text, Pressable } from 'react-native';
+import { StyleSheet, SafeAreaView, View,Image,Text, Pressable, Button } from 'react-native';
 import colors from '../config/colors';
 import text from '../config/text';
 
 function HomePage(props) {
+    const navigation = useNavigation();
     return (
         <SafeAreaView style = {style.container}>
             <View style = {style.cardBackground}>
@@ -23,6 +25,7 @@ function HomePage(props) {
                 <Pressable style ={style.reject} title = "Reject" onPress={()=>console.log("Reject Pressed")} ></Pressable>
                 <Pressable style ={style.accept} title = "Accept" onPress={()=>console.log("Accept Pressed")} ></Pressable>
             </View>
+            <Button title="Go to Chat Screen" onPress={() => navigation.navigate('Chat')}/>
         </SafeAreaView>
     );
 }
