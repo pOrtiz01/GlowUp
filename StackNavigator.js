@@ -3,21 +3,17 @@ import React from 'react';
 import WelcomeScreen from "./app/screens/WelcomeScreen"
 import HomePage from "./app/screens/HomePage"
 import ChatScreen from "./app/screens/ChatScreen"
+import LoginScreen from "./app/screens/LoginScreen"
+import HomeScreen from "./app/screens/HomeScreen"
 
 const Stack = createNativeStackNavigator();
 
 function StackNavigator(props) {
-    const user = false;
     return (
         <Stack.Navigator>
-            {user ? (
-            <>
-                <Stack.Screen name="HomePage" component={HomePage}/>
-                <Stack.Screen name="Chat" component={ChatScreen}/>
-            </>
-            ):(
-                <Stack.Screen name="Login" component={WelcomeScreen}/>
-            )}
+            <Stack.Screen options={{headerShown:false}} name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Home" component={HomeScreen}/>
+            <Stack.Screen name="Chat" component={ChatScreen}/>
         </Stack.Navigator>
     );
 }
