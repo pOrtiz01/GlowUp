@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import colors from '../config/colors';
@@ -6,6 +6,7 @@ import text from '../config/text';
 import { auth } from '../../firebase';
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword} from "firebase/auth"
 import { useNavigation } from '@react-navigation/native';
+
 
 
 const LoginScreen = () => {
@@ -43,6 +44,10 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView style={styles.container}
     behaviour="padding">
+        <ImageBackground 
+        resizeMode="cover"
+        style={styles.backgroundImage} 
+        source={{uri: "https://tinder.com/static/tinder.png"}}> 
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Email"
@@ -72,7 +77,7 @@ const LoginScreen = () => {
                         <Text style={styles.buttonOutlineText}>Register</Text>
                 </TouchableOpacity>
             </View>
-      
+        </ImageBackground>
 
 
     </KeyboardAvoidingView>
@@ -84,11 +89,10 @@ export default LoginScreen
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     inputContainer:{
-        width:'80%'
+        width:'80%',
+        marginTop:40
     },
     input:{
         backgroundColor: 'white',
@@ -125,6 +129,11 @@ const styles = StyleSheet.create({
         color: colors.primary,
         fontWeight: '700',
         fontSize:16,
+    },
+    backgroundImage:{
+        flex:1,
+        justifyContent: 'flex-top',
+        alignItems: 'center',
     }
 
 })
