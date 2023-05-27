@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import colors from '../config/colors';
 import { auth } from '../../firebase';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
     const navigation = useNavigation()
@@ -18,14 +19,20 @@ const HomeScreen = () => {
     }
 
     return (
-    <View style = {styles.container}>
+    <SafeAreaView style = {styles.container}>
         <Text>Email: {auth.currentUser?.email}</Text>
         <TouchableOpacity 
         onPress={handleSignout}
         style={styles.button}>
             <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
-    </View>
+        
+        <TouchableOpacity 
+        onPress={() => navigation.navigate('Chat')}
+        style={styles.button}>
+            <Text style={styles.buttonText}>Chat Screen</Text>
+        </TouchableOpacity>
+    </SafeAreaView>
     )
 }
 

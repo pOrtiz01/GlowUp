@@ -12,8 +12,9 @@ function StackNavigator(props) {
     return (
         <Stack.Navigator>
             <Stack.Screen options={{headerShown:false}} name="Login" component={LoginScreen}/>
-            <Stack.Screen name="Home" component={HomeScreen}/>
-            <Stack.Screen name="Chat" component={ChatScreen}/>
+            <Stack.Screen options={{headerShown:false}} name="Home" component={HomeScreen}/>
+            <Stack.Screen  name="Chat" component={ChatScreen}/>
+            <Stack.Screen options={{headerShown:false}} name="Cards" component={HomePage}/>
         </Stack.Navigator>
     );
 }
