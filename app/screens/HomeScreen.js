@@ -54,7 +54,7 @@ const HomeScreen = () => {
                 <Image style={styles.profilePhoto} source={{uri:auth.currentUser.photoURL}}/>
             </TouchableOpacity>
             
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate("Modal")}>
                 <Image style={styles.appLogo} source={require('../assets/TinderLogo.png')}/>
             </TouchableOpacity>
 
