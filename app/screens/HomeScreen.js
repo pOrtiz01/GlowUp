@@ -1,40 +1,56 @@
 import { StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
-import {React,useRef} from 'react'
+import { useFocusEffect, useNavigation,useIsFocused } from '@react-navigation/native';
+import React,{useEffect,useLayoutEffect,useRef,useState} from 'react'
 import colors from '../config/colors';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Swiper from "react-native-deck-swiper"
+import { onSnapshot,doc, collection, snapshotEqual } from 'firebase/firestore';
 
 const HomeScreen = () => {
-    const DUMMY_DATA = [
-        {
-            firstName:"Pablo",
-            lastName:"Ortiz",
-            job:"CGO",
-            photoURL:"https://media.licdn.com/dms/image/C4D03AQEsgtRX1UezZw/profile-displayphoto-shrink_200_200/0/1617661535545?e=1690416000&v=beta&t=7PPv94uQMaRnMjPqKK680t3O9dS4BygPkYLBvZLe9B0",
-            age:22,
-            id:1
-        },
-        {
-            firstName:"Mark",
-            lastName:"Uszkay",
-            job:"CLO",
-            photoURL:"https://media.licdn.com/dms/image/D5603AQFJQjkoBKjLmg/profile-displayphoto-shrink_200_200/0/1682873089512?e=1690416000&v=beta&t=-5gFvOYssvrMq921aNf8JraVYPqBrBC-dsFhYT9BVzE",
-            age:2,
-            id:2
-        },
-        {
-            firstName:"Wes",
-            lastName:"Nicholson",
-            job:"CCO",
-            photoURL:"https://media.licdn.com/dms/image/C5603AQEQXj_w3N8hbA/profile-displayphoto-shrink_200_200/0/1632797932819?e=1690416000&v=beta&t=b0v77uNQHWYmfTQ7Xel-0z5nEVKbkQi21lRJeBEATXM",
-            age:30,
-            id:3
-        }
-    ];
-    const navigation = useNavigation()
+    const navigation = useNavigation();
     const swipeRef=useRef(null);
+    const [profiles, setProfiles]=useState([]);
+    const [imageSource,setImageSource]=useState('');
+
+    useLayoutEffect(() => 
+        onSnapshot(doc(db,'users',auth.currentUser.uid),(snapshot) =>{
+            if(!snapshot.exists()) {
+                navigation.navigate('Modal')
+            }
+           ;
+            
+        }),
+        []
+    );
+
+    useFocusEffect(
+        React.useCallback(() =>{
+            const newImageSource=auth.currentUser.photoURL;
+            setImageSource(newImageSource)
+            console.log("Re-rendering HomeScreen");
+        
+            return() =>{
+                
+            };
+        },[])
+    );
+
+    useEffect(() => {
+        let unsub;
+        const fetchCards = async() => {
+            unsub=onSnapshot(collection(db,'users'),(snapshot) => {
+                setProfiles(snapshot.docs.filter(doc => doc.id !== auth.currentUser.uid).map((doc) => ({
+                    id:doc.id,
+                    ...doc.data(),
+                }))
+                );
+            });
+        };
+
+        fetchCards();
+        return unsub;
+    },[]);
 
     const handleSignout = () =>{
         auth
@@ -45,13 +61,12 @@ const HomeScreen = () => {
         })
         .catch(error => alert(error.message))
     }
-    auth.currentUser.photoURL="https://media.licdn.com/dms/image/C4D03AQEsgtRX1UezZw/profile-displayphoto-shrink_200_200/0/1617661535545?e=1690416000&v=beta&t=7PPv94uQMaRnMjPqKK680t3O9dS4BygPkYLBvZLe9B0"
     return (
     <SafeAreaView style = {styles.container}>
         {/*Header*/}
         <View style={styles.header}>
             <TouchableOpacity style = {styles.profilePhotoContainer} onPress={handleSignout}>
-                <Image style={styles.profilePhoto} source={{uri:auth.currentUser.photoURL}}/>
+                <Image style={styles.profilePhoto} source={{uri:imageSource}}/>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={()=> navigation.navigate("Modal")}>
@@ -69,7 +84,7 @@ const HomeScreen = () => {
             <Swiper 
                 ref={swipeRef}
                 containerStyle={{backgroundColor: "transparent"}}
-                cards={DUMMY_DATA}
+                cards={profiles}
                 stackSize={5}
                 cardIndex={0}
                 animateCardOpacity
@@ -101,7 +116,7 @@ const HomeScreen = () => {
                     },
 
                 }}
-                renderCard={(card) => (
+                renderCard={(card) => card ? (
                     <View 
                     key={card.id} 
                     style={styles.card}
@@ -113,13 +128,18 @@ const HomeScreen = () => {
                    
                         <View style={[styles.cardFooterContainer,styles.shadow]}> 
                             <View> 
-                                <Text style={styles.nameText}>{card.firstName} {card.lastName}</Text>
+                                <Text style={styles.nameText}>{card.displayName}</Text>
                                 <Text>{card.job}</Text>
                             </View>
                             <Text style={styles.ageText}>{card.age}</Text>
                         </View>
                     </View>
-                )}
+                ) :(
+                    <View style ={[styles.blankCard,styles.shadow]}>
+                        <Text style={styles.blankCardText}>No more profiles</Text>
+                        <Image style={styles.blankCardImage} height={100} width={100} source={{uri:"https://links.papareact.com/6gb"}}/>
+                    </View>
+                ) }
             />
         </View>
         {/*End of Cards*/}
@@ -227,12 +247,12 @@ const styles = StyleSheet.create({
       
     },
     shadow:{
-        shadowColor:"red",
+        shadowColor:"#000",
         shadowOffset:{
             width:0,
             height:5,
         },
-        shadowOpacity:.2,
+        shadowOpacity:.1,
         shadowRadius:1.41,
         elevation:2,
     },
@@ -272,5 +292,50 @@ const styles = StyleSheet.create({
         borderRadius:80/2,
         backgroundColor:"green",
         opacity:.7
+    },
+    blankCard:{
+        position:"relative",
+        backgroundColor:"white",
+        height:"75%",
+        borderRadius: 50/2,
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    blankCardImage:{
+        height:100,
+        width:"100%"
+    },
+    blankCardText:{
+        fontWeight:"bold",
+        padding:20
     }
 })
+
+/*
+    const DUMMY_DATA = [
+        {
+            firstName:"Pablo",
+            lastName:"Ortiz",
+            job:"CGO",
+            photoURL:"https://media.licdn.com/dms/image/C4D03AQEsgtRX1UezZw/profile-displayphoto-shrink_200_200/0/1617661535545?e=1690416000&v=beta&t=7PPv94uQMaRnMjPqKK680t3O9dS4BygPkYLBvZLe9B0",
+            age:22,
+            id:1
+        },
+        {
+            firstName:"Mark",
+            lastName:"Uszkay",
+            job:"CLO",
+            photoURL:"https://media.licdn.com/dms/image/D5603AQFJQjkoBKjLmg/profile-displayphoto-shrink_200_200/0/1682873089512?e=1690416000&v=beta&t=-5gFvOYssvrMq921aNf8JraVYPqBrBC-dsFhYT9BVzE",
+            age:2,
+            id:2
+        },
+        {
+            firstName:"Wes",
+            lastName:"Nicholson",
+            job:"CCO",
+            photoURL:"https://media.licdn.com/dms/image/C5603AQEQXj_w3N8hbA/profile-displayphoto-shrink_200_200/0/1632797932819?e=1690416000&v=beta&t=b0v77uNQHWYmfTQ7Xel-0z5nEVKbkQi21lRJeBEATXM",
+            age:30,
+            id:3
+        }
+    ];
+*/

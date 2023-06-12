@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity } from 'react-native';
 import React, {useState} from 'react';
-import { auth } from '../../firebase';
+import { auth} from '../../firebase';
+import {updateProfile} from 'firebase/auth'
 import {setDoc,doc, serverTimestamp} from "firebase/firestore";
 import {db} from "../../firebase"
 import { useNavigation } from '@react-navigation/native';
@@ -14,8 +15,20 @@ const ModalScreen = () => {
     const navigation = useNavigation();
     const incompleteForm =!image || !job || !age || !first || !last;
 
+
+    const updateAuthProfile = () => {
+        updateProfile(auth.currentUser, {
+            displayName: first,
+            photoURL: image
+        }).then(() =>{
+            console.log("Updated Auth Profile")
+        }).catch((error) =>{
+            console.log(error)
+        })
+    };
+
     const updateUserProfile = () => {
-        setDoc(doc(db,'user',auth.currentUser.uid),{
+        setDoc(doc(db,'users',auth.currentUser.uid),{
             id:auth.currentUser.uid,
             displayName: first,
             photoURL:image,
@@ -23,12 +36,20 @@ const ModalScreen = () => {
             age:age,
             timestamp: serverTimestamp()
         }).then(() => {
+            console.log("Updated User Profile")
             navigation.navigate('Home')
         }).catch(error => {
             alert(error.message);
         });
     };
+    
+    const updateProfiles = () => {
+        console.log("Called");
+        updateAuthProfile();
+        updateUserProfile();
+        console.log(auth.currentUser);
 
+    }
     return (
     <View style={styles.container}>
         <Image style={styles.modalImage} resizeMode="contain" source={{uri: "https://links.papareact.com/2pf"}}/>
@@ -91,7 +112,7 @@ const ModalScreen = () => {
 
 
 
-    <TouchableOpacity onPress={updateUserProfile} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"red"}]} disabled={incompleteForm}>
+    <TouchableOpacity onPress={updateProfiles} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"red"}]} disabled={incompleteForm}>
         <Text style={styles.buttonText}>Update Profile</Text>
     </TouchableOpacity>
 
