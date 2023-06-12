@@ -5,7 +5,8 @@ import colors from '../config/colors';
 import { auth, db } from '../../firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Swiper from "react-native-deck-swiper"
-import { onSnapshot,doc, collection, snapshotEqual, setDoc,getDocs,query,where } from 'firebase/firestore';
+import { onSnapshot,doc, collection, snapshotEqual, setDoc,getDocs,query,where, serverTimestamp ,getDoc} from 'firebase/firestore';
+import generateId from '../lib/generateId';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -81,9 +82,40 @@ const HomeScreen = () => {
         if(!profiles[cardIndex]) return;
 
         const userSwiped=profiles[cardIndex];
-        console.log(`You swiped yes on ${userSwiped.displayName}`);
+        const loggedInProfile = await(await getDoc(doc(db,'users',auth.currentUser.uid))).data();
+    
 
-        setDoc(doc(db,'users',auth.currentUser.uid,'swipes',userSwiped.id),userSwiped);
+        //check if user swiped on you 
+        getDoc(doc(db,'users',userSwiped.id,'swipes',auth.currentUser.uid)).then((documentSnapshot) =>{
+            if(documentSnapshot.exists()){
+                //user has matched with you before you matched with them
+                console.log(`You matched with ${userSwiped.displayName}`);
+                setDoc(doc(db,'users',auth.currentUser.uid,'swipes',userSwiped.id),userSwiped);
+                console.log(generateId(auth.currentUser.uid,userSwiped.id))
+                //Create a match
+                setDoc(doc(db,'matches',generateId(auth.currentUser.uid,userSwiped.id)),{
+                    users:{
+                        [auth.currentUser.uid]:loggedInProfile,
+                        [userSwiped.uid]: userSwiped
+                    },
+                    usersMatched: [auth.currentUser.uid,userSwiped.id],
+                    timestamp:serverTimestamp(),
+                });
+
+                navigation.navigate('Match', {
+                    loggedInProfile,userSwiped,
+                });
+            } else{
+                //you were the first that swiped, or you didnt get swiped on
+                console.log(`You swiped yes on ${userSwiped.displayName}`);
+
+                setDoc(doc(db,'users',auth.currentUser.uid,'swipes',userSwiped.id),userSwiped);
+            }
+        }).catch((error)=>{
+            console.error('Error:', error)
+        })
+
+
     };
 
     return (
