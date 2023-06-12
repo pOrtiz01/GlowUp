@@ -5,7 +5,7 @@ import colors from '../config/colors';
 import { auth, db } from '../../firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Swiper from "react-native-deck-swiper"
-import { onSnapshot,doc, collection, snapshotEqual } from 'firebase/firestore';
+import { onSnapshot,doc, collection, snapshotEqual, setDoc,getDocs,query,where } from 'firebase/firestore';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -17,9 +17,7 @@ const HomeScreen = () => {
         onSnapshot(doc(db,'users',auth.currentUser.uid),(snapshot) =>{
             if(!snapshot.exists()) {
                 navigation.navigate('Modal')
-            }
-           ;
-            
+            }  
         }),
         []
     );
@@ -39,8 +37,16 @@ const HomeScreen = () => {
     useEffect(() => {
         let unsub;
         const fetchCards = async() => {
-            unsub=onSnapshot(collection(db,'users'),(snapshot) => {
-                setProfiles(snapshot.docs.filter(doc => doc.id !== auth.currentUser.uid).map((doc) => ({
+
+            const passes= await getDocs(collection(db,'users',auth.currentUser.uid,'passes')).then((snapshot)=> snapshot.docs.map((doc) => doc.id));
+
+            const swipes= await getDocs(collection(db,'users',auth.currentUser.uid,'swipes')).then((snapshot)=> snapshot.docs.map((doc) => doc.id));
+
+            const passedUserIds=passes.length>0?passes:['test'];
+            const swipedUserIds=swipes.length>0?swipes:['test'];
+
+            unsub=onSnapshot(query(collection(db,"users"),where('id','not-in',[...passedUserIds, ...swipedUserIds])),(snapshot) => {
+                setProfiles(snapshot.docs.filter((doc) => doc.id !== auth.currentUser.uid).map((doc) => ({
                     id:doc.id,
                     ...doc.data(),
                 }))
@@ -50,8 +56,8 @@ const HomeScreen = () => {
 
         fetchCards();
         return unsub;
-    },[]);
-
+    },[db]);
+    console.log(profiles)
     const handleSignout = () =>{
         auth
         .signOut()
@@ -61,6 +67,25 @@ const HomeScreen = () => {
         })
         .catch(error => alert(error.message))
     }
+    
+    const swipeLeft = (cardIndex) =>{
+        if(!profiles[cardIndex]) return;
+
+        const userSwiped=profiles[cardIndex];
+        console.log(`You swiped no on ${userSwiped.displayName}`);
+
+        setDoc(doc(db,'users',auth.currentUser.uid,'passes',userSwiped.id),userSwiped);
+    };
+
+    const swipeRight = async (cardIndex) =>{
+        if(!profiles[cardIndex]) return;
+
+        const userSwiped=profiles[cardIndex];
+        console.log(`You swiped yes on ${userSwiped.displayName}`);
+
+        setDoc(doc(db,'users',auth.currentUser.uid,'swipes',userSwiped.id),userSwiped);
+    };
+
     return (
     <SafeAreaView style = {styles.container}>
         {/*Header*/}
@@ -89,13 +114,15 @@ const HomeScreen = () => {
                 cardIndex={0}
                 animateCardOpacity
                 verticalSwipe={false}
-                onSwipedLeft={() => {
-                    console.log('Swipe No')
+                onSwipedLeft={(cardIndex) => {
+                    console.log('Swipe No');
+                    swipeLeft(cardIndex);
                 }}
-                onSwipedRight={() => {
-                    console.log('Swipe Yes')
+                onSwipedRight={(cardIndex) => {
+                    console.log('Swipe Yes');
+                    swipeRight(cardIndex);
                 }}
-
+                backgroundColor={"4FD0E9"}
                 overlayLabels={{
                     left:{
                         title: "NO",
@@ -135,6 +162,7 @@ const HomeScreen = () => {
                         </View>
                     </View>
                 ) :(
+                   
                     <View style ={[styles.blankCard,styles.shadow]}>
                         <Text style={styles.blankCardText}>No more profiles</Text>
                         <Image style={styles.blankCardImage} height={100} width={100} source={{uri:"https://links.papareact.com/6gb"}}/>
@@ -146,13 +174,13 @@ const HomeScreen = () => {
         <View style={styles.footerContainer}>
             <TouchableOpacity 
             style={styles.footerNoContainer}
-            onPress={() => swipeRef.current.swipeRight()}
+            onPress={() => swipeRef.current.swipeLeft()}
             >
                 <Image style={styles.footerImage} source={require('../assets/closed.png')}/>
             </TouchableOpacity>
             <TouchableOpacity 
             style={styles.footerYesContainer}
-            onPress={() => swipeRef.current.swipeLeft()}
+            onPress={() => swipeRef.current.swipeRight()}
             >
                 <Image style={styles.footerImage} source={require('../assets/checked.png')}/>
             </TouchableOpacity>
