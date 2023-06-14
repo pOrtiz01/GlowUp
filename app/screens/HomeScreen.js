@@ -370,32 +370,3 @@ const styles = StyleSheet.create({
         padding:20
     }
 })
-
-/*
-    const DUMMY_DATA = [
-        {
-            firstName:"Pablo",
-            lastName:"Ortiz",
-            job:"CGO",
-            photoURL:"https://media.licdn.com/dms/image/C4D03AQEsgtRX1UezZw/profile-displayphoto-shrink_200_200/0/1617661535545?e=1690416000&v=beta&t=7PPv94uQMaRnMjPqKK680t3O9dS4BygPkYLBvZLe9B0",
-            age:22,
-            id:1
-        },
-        {
-            firstName:"Mark",
-            lastName:"Uszkay",
-            job:"CLO",
-            photoURL:"https://media.licdn.com/dms/image/D5603AQFJQjkoBKjLmg/profile-displayphoto-shrink_200_200/0/1682873089512?e=1690416000&v=beta&t=-5gFvOYssvrMq921aNf8JraVYPqBrBC-dsFhYT9BVzE",
-            age:2,
-            id:2
-        },
-        {
-            firstName:"Wes",
-            lastName:"Nicholson",
-            job:"CCO",
-            photoURL:"https://media.licdn.com/dms/image/C5603AQEQXj_w3N8hbA/profile-displayphoto-shrink_200_200/0/1632797932819?e=1690416000&v=beta&t=b0v77uNQHWYmfTQ7Xel-0z5nEVKbkQi21lRJeBEATXM",
-            age:30,
-            id:3
-        }
-    ];
-*/
