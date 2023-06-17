@@ -50,43 +50,47 @@ export default MatchedScreen
 const styles = StyleSheet.create({
   container:{
     height:"100%",
-    backgroundColor:"red",
-    opacity:.8,
-    padding:60
+    backgroundColor:"#f56565",
+    paddingTop:".5%",
+    opacity:.95
+    
   },
   matchImageContainer:{
     justifyContent:"center",
-    paddingHorizontal:60,
-    paddingTop:40
+    paddingHorizontal:"5%",
+    paddingTop:"30%",
+    
   },
   matchText:{
     color:"white",
     textAlign:"center",
-    marginTop:10
+    
   },
   ImageContainer:{
     flexDirection:"row",
     justifyContent:"space-evenly",
-    marginTop:10
+    marginTop:"10%"
   },
   profileImage:{
-    height:64,
-    width:64,
-    borderRadius:64/2
+    height:150,
+    width:150,
+    borderRadius:150/2
   },
   messageButton:{
     backgroundColor:"white",
-    margin:10,
-    paddingHorizontal:20,
-    paddingVertical:16,
-    borderRadius:16/2,
-    marginTop:40
+    margin:"10%",
+    paddingLeft:"5%",
+    paddingRight:"5%",
+    paddingTop:"5%",
+    paddingBottom:"5%",
+    borderRadius:9999,
+    marginTop:"20%"
   },
   buttonText:{
     textAlign:"center"
   },
   matchImage:{
-    height:40,
+    height:"35%",
     width:"100%",
   }
 })

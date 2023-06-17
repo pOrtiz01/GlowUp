@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 import colors from '../config/colors';
 
 export default StyleSheet.create({
+    headerText:{
+        fontSize:30,
+        fontWeight:'bold'
+    },
     normal: {
         fontSize: 16,
         letterSpacing: 0.25,
