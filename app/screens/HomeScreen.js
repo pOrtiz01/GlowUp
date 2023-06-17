@@ -12,7 +12,6 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const swipeRef=useRef(null);
     const [profiles, setProfiles]=useState([]);
-    const [imageSource,setImageSource]=useState('');
 
     useLayoutEffect(() => 
         onSnapshot(doc(db,'users',auth.currentUser.uid),(snapshot) =>{
@@ -21,18 +20,6 @@ const HomeScreen = () => {
             }  
         }),
         []
-    );
-
-    useFocusEffect(
-        React.useCallback(() =>{
-            const newImageSource=auth.currentUser.photoURL;
-            setImageSource(newImageSource)
-            console.log("Re-rendering HomeScreen");
-        
-            return() =>{
-                
-            };
-        },[])
     );
 
     useEffect(() => {
@@ -58,7 +45,6 @@ const HomeScreen = () => {
         fetchCards();
         return unsub;
     },[db]);
-    console.log(profiles)
     const handleSignout = () =>{
         auth
         .signOut()
@@ -91,12 +77,11 @@ const HomeScreen = () => {
                 //user has matched with you before you matched with them
                 console.log(`You matched with ${userSwiped.displayName}`);
                 setDoc(doc(db,'users',auth.currentUser.uid,'swipes',userSwiped.id),userSwiped);
-                console.log(generateId(auth.currentUser.uid,userSwiped.id))
                 //Create a match
                 setDoc(doc(db,'matches',generateId(auth.currentUser.uid,userSwiped.id)),{
                     users:{
                         [auth.currentUser.uid]:loggedInProfile,
-                        [userSwiped.uid]: userSwiped
+                        [userSwiped.id]: userSwiped
                     },
                     usersMatched: [auth.currentUser.uid,userSwiped.id],
                     timestamp:serverTimestamp(),
@@ -123,7 +108,7 @@ const HomeScreen = () => {
         {/*Header*/}
         <View style={styles.header}>
             <TouchableOpacity style = {styles.profilePhotoContainer} onPress={handleSignout}>
-                <Image style={styles.profilePhoto} source={{uri:imageSource}}/>
+                <Image style={styles.profilePhoto} source={{uri:auth.currentUser.photoURL}}/>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={()=> navigation.navigate("Modal")}>

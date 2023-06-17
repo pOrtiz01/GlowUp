@@ -7,6 +7,7 @@ import LoginScreen from "./app/screens/LoginScreen"
 import HomeScreen from "./app/screens/HomeScreen"
 import ModalScreen from './app/screens/ModalScreen';
 import MatchedScreen from './app/screens/MatchedScreen';
+import MessageScreen from './app/screens/MessageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ function StackNavigator(props) {
                 <Stack.Screen options={{headerShown:false}} name="Login" component={LoginScreen}/>
                 <Stack.Screen options={{headerShown:false}} name="Home" component={HomeScreen}/>
                 <Stack.Screen options={{headerShown:false}} name="Chat" component={ChatScreen}/>
+                <Stack.Screen options={{headerShown:false}} name="Message" component={MessageScreen}/>
                 <Stack.Screen options={{headerShown:false}} name="Cards" component={HomePage}/>
             </Stack.Group>
             
