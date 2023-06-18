@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     },
     blankCardImage:{
         height:100,
-        width:"100%"
+        width:100
     },
     blankCardText:{
         fontWeight:"bold",

@@ -5,6 +5,7 @@ import {updateProfile} from 'firebase/auth'
 import {setDoc,doc, serverTimestamp,collection,where,getDoc,query,onSnapshot} from "firebase/firestore";
 import {db} from "../../firebase"
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAvoidingView } from 'react-native';
 
 const ModalScreen = () => {
     const [image, setImage]=useState(null);
@@ -72,73 +73,72 @@ const ModalScreen = () => {
     }
     return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-        <Image style={styles.modalImage} resizeMode="contain" source={{uri: "https://links.papareact.com/2pf"}}/>
-    
-    <Text style={styles.welcomeText}>
-        Welcome!
-    </Text>
-    
-    <Text style={styles.stepText}>
-        Step 1: First Name
-    </Text>
-    <TextInput
-        value={first}
-        onChangeText={text =>setFirst(text)}
-        style={styles.textInput}
-        placeholder='Enter your First Name'
-    />
+        <KeyboardAvoidingView style={styles.container}>
+            <Image style={styles.modalImage} resizeMode="contain" source={{uri: "https://links.papareact.com/2pf"}}/>
+            
+            <Text style={styles.welcomeText}>
+                Welcome!
+            </Text>
+            
+            <Text style={styles.stepText}>
+                Step 1: First Name
+            </Text>
+            <TextInput
+                value={first}
+                onChangeText={text =>setFirst(text)}
+                style={styles.textInput}
+                placeholder='Enter your First Name'
+            />
 
-    <Text style={styles.stepText}>
-        Step 2: Last Name
-    </Text>
-    <TextInput
-        value={last}
-        onChangeText={text =>setLast(text)}
-        style={styles.textInput}
-        placeholder='Enter your Last Name'
-        contextMenuHidden={false}
-    />
+            <Text style={styles.stepText}>
+                Step 2: Last Name
+            </Text>
+            <TextInput
+                value={last}
+                onChangeText={text =>setLast(text)}
+                style={styles.textInput}
+                placeholder='Enter your Last Name'
+            />
 
-    <Text style={styles.stepText}>
-        Step 3: Profile Picture
-    </Text>
-    <TextInput
-        value={image}
-        onChangeText={text =>setImage(text)}
-        style={styles.textInput}
-        placeholder='Enter Profile Picture URL'
-    />
+            <Text style={styles.stepText}>
+                Step 3: Profile Picture
+            </Text>
+            <TextInput
+                value={image}
+                onChangeText={text =>setImage(text)}
+                style={styles.textInput}
+                placeholder='Enter Profile Picture URL'
+            />
 
-    <Text style={styles.stepText}>
-        Step 4: The Job
-    </Text>
-    <TextInput
-        value={job}
-        onChangeText={text =>setJob(text)}
-        style={styles.textInput}
-        placeholder='Enter your occupation'
-    />
+            <Text style={styles.stepText}>
+                Step 4: The Job
+            </Text>
+            <TextInput
+                value={job}
+                onChangeText={text =>setJob(text)}
+                style={styles.textInput}
+                placeholder='Enter your occupation'
+            />
 
-    <Text style={styles.stepText}>
-        Step 5: The Age
-    </Text>
-    <TextInput
-        value={age}
-        onChangeText={text =>setAge(text)}
-        style={styles.textInput}
-        placeholder='Enter your age'
-        maxLength={2}
-        keyboardType='numeric'
-    />
-
+            <Text style={styles.stepText}>
+                Step 5: The Age
+            </Text>
+            <TextInput
+                value={age}
+                onChangeText={text =>setAge(text)}
+                style={styles.textInput}
+                placeholder='Enter your age'
+                maxLength={2}
+                keyboardType='numeric'
+            />
 
 
-    <TouchableOpacity onPress={updateProfiles} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"red"}]} disabled={incompleteForm}>
-        <Text style={styles.buttonText}>Update Profile</Text>
-    </TouchableOpacity>
 
-    </View>
+            <TouchableOpacity onPress={updateProfiles} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"red"}]} disabled={incompleteForm}>
+                <Text style={styles.buttonText}>Update Profile</Text>
+            </TouchableOpacity>
+
+        </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   )
 }
