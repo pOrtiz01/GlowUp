@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity, TouchableWithoutFeedback,Keyboard } from 'react-native';
 import React, {useState,useEffect} from 'react';
 import { auth} from '../../firebase';
 import {updateProfile} from 'firebase/auth'
@@ -71,6 +71,7 @@ const ModalScreen = () => {
 
     }
     return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
         <Image style={styles.modalImage} resizeMode="contain" source={{uri: "https://links.papareact.com/2pf"}}/>
     
@@ -96,6 +97,7 @@ const ModalScreen = () => {
         onChangeText={text =>setLast(text)}
         style={styles.textInput}
         placeholder='Enter your Last Name'
+        contextMenuHidden={false}
     />
 
     <Text style={styles.stepText}>
@@ -137,6 +139,7 @@ const ModalScreen = () => {
     </TouchableOpacity>
 
     </View>
+    </TouchableWithoutFeedback>
   )
 }
 
