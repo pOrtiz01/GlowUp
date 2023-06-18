@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { auth} from '../../firebase';
 import {updateProfile} from 'firebase/auth'
-import {setDoc,doc, serverTimestamp} from "firebase/firestore";
+import {setDoc,doc, serverTimestamp,collection,where,getDoc,query,onSnapshot} from "firebase/firestore";
 import {db} from "../../firebase"
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,6 +14,25 @@ const ModalScreen = () => {
     const [last, setLast]=useState(null);
     const navigation = useNavigation();
     const incompleteForm =!image || !job || !age || !first || !last;
+
+    useEffect(() => {
+        let unsub;
+        const fetchCards = async() => {
+            const q = query(collection(db,"users"),where('id','==',auth.currentUser.uid));
+            unsub=onSnapshot(q,(snapshot) => {
+                snapshot.forEach((doc)=>{
+                    setImage(doc.data().photoURL)
+                    setJob(doc.data().job)
+                    setAge(doc.data().age)
+                    setFirst(doc.data().displayName)
+                    setLast(doc.data().lastName)
+                })
+            });
+        };
+
+        fetchCards();
+        return unsub;
+    },[]);
 
 
     const updateAuthProfile = () => {
@@ -31,6 +50,7 @@ const ModalScreen = () => {
         setDoc(doc(db,'users',auth.currentUser.uid),{
             id:auth.currentUser.uid,
             displayName: first,
+            lastName:last,
             photoURL:image,
             job:job,
             age:age,
@@ -47,7 +67,7 @@ const ModalScreen = () => {
         console.log("Called");
         updateAuthProfile();
         updateUserProfile();
-        console.log(auth.currentUser);
+        
 
     }
     return (
