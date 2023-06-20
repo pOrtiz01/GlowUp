@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View,Image } from 'react-native'
 import { useNavigation} from '@react-navigation/native';
 import React from 'react'
 import { auth } from '../../firebase';
@@ -22,8 +22,15 @@ const CustomDrawer = (props) => {
 
   return (
     <View style={styles.drawerContainer}>
-        <DrawerContentScrollView {...props} >
-            <DrawerItemList {...props} />
+        <DrawerContentScrollView {...props} contentContainerStyle={styles.menuOptionsContainer}>
+            <ImageBackground source={require('../assets/menu-bg.jpeg')} style={styles.imageBackground}>
+                <Image style={styles.profilePhoto} source={{uri:auth.currentUser.photoURL}}/>
+                <Text style={styles.usernameText}>{auth.currentUser.displayName}</Text>
+            </ImageBackground>
+            <View style={styles.menuList}>
+                <DrawerItemList {...props} />
+            </View>
+            
         </DrawerContentScrollView>
     
         <View style={styles.footerContainer}>
@@ -68,5 +75,27 @@ const styles = StyleSheet.create({
         fontSize:15,
         marginLeft:5,
         fontWeight:"bold"
+    },
+    menuOptionsContainer:{
+        backgroundColor: "#8200d6"
+    },
+    imageBackground:{
+        padding:20
+    },
+    profilePhoto:{
+        height:80,
+        width:80,
+        borderRadius:40,
+        marginBottom:10
+    },
+    usernameText:{
+        color:"white",
+        fontSize:18,
+        fontWeight:"bold"
+    },
+    menuList:{
+        flex:1,
+        backgroundColor:"white",
+        paddingTop:10
     }
 })

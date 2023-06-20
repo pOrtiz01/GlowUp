@@ -1,13 +1,16 @@
 import { createNativeStackNavigator} from '@react-navigation/native-stack'
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
+import CustomDrawer from './app/components/CustomDrawer';
 import ChatScreen from "./app/screens/ChatScreen"
 import LoginScreen from "./app/screens/LoginScreen"
 import HomeScreen from "./app/screens/HomeScreen"
 import ModalScreen from './app/screens/ModalScreen';
 import MatchedScreen from './app/screens/MatchedScreen';
 import MessageScreen from './app/screens/MessageScreen';
-import CustomDrawer from './app/components/CustomDrawer';
+import SettingsScreen from './app/screens/SettingsScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -16,8 +19,9 @@ const Drawer = createDrawerNavigator();
 function DrawerNavigator(){
     return(
         <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/>} >
-            <Drawer.Screen options={{headerShown:false,drawerLabel: 'Home'}} name="HomePage" component={HomeScreen} />
-            <Drawer.Screen options={{headerShown:false}} name="Profile" component={ModalScreen} />
+            <Drawer.Screen options={{drawerActiveBackgroundColor:"#aa18ea",drawerActiveTintColor:"#fff",drawerInactiveTintColor:"#333",drawerLabelStyle:{marginLeft:-25,fontSize:15,fontWeight:"bold"},headerShown:false,drawerLabel: 'Home',drawerIcon:({color}) => (<Ionicons name="home-outline" size={22} color={color}/>)}} name="HomePage" component={HomeScreen} />
+            <Drawer.Screen options={{drawerActiveBackgroundColor:"#aa18ea",drawerActiveTintColor:"#fff",drawerInactiveTintColor:"#333",drawerLabelStyle:{marginLeft:-25,fontSize:15,fontWeight:"bold"},headerShown:false,drawerIcon:({color}) => (<Ionicons name="person-outline" size={22} color={color}/>)}} name="Profile" component={ModalScreen} />
+            <Drawer.Screen options={{drawerActiveBackgroundColor:"#aa18ea",drawerActiveTintColor:"#fff",drawerInactiveTintColor:"#333",drawerLabelStyle:{marginLeft:-25,fontSize:15,fontWeight:"bold"},headerShown:false,drawerIcon:({color}) => (<Ionicons name="settings-outline" size={22} color={color}/>)}} name="Settings" component={SettingsScreen} />
         </Drawer.Navigator>
     )
 }
