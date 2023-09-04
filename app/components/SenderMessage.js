@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import text from '../config/text'
 
 const SenderMessage = ({message}) => {
   return (
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
         marginLeft:"auto"
     },
     messageText:{
-        color:"white"
+        color:"white",
+        
     }
 })
