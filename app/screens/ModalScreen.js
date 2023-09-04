@@ -74,7 +74,7 @@ const ModalScreen = () => {
     return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={styles.container}>
-            <Image style={styles.modalImage} resizeMode="contain" source={{uri: "https://links.papareact.com/2pf"}}/>
+            <Image style={styles.modalImage} resizeMode="contain" source={require('../assets/GlowUpLogo6.png')}/>
             
             <Text style={styles.welcomeText}>
                 Welcome!
@@ -134,7 +134,7 @@ const ModalScreen = () => {
 
 
 
-            <TouchableOpacity onPress={updateProfiles} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"red"}]} disabled={incompleteForm}>
+            <TouchableOpacity onPress={updateProfiles} style={[styles.button,incompleteForm ? {backgroundColor:"gray"} : {backgroundColor:"#9B00FF"}]} disabled={incompleteForm}>
                 <Text style={styles.buttonText}>Update Profile</Text>
             </TouchableOpacity>
 
@@ -149,11 +149,14 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         alignItems:'center',
-        paddingTop:1
+        paddingTop:1,
+        backgroundColor:"white"
     },
     modalImage:{
-        height:100,
-        width:"100%"
+        height:60,
+        width:"100%",
+        marginTop: 20,
+        marginBottom: 100
     },
     welcomeText:{
         color:"gray",
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
         textAlign:"center",
         padding:8,
         fontWeight:"bold",
-        color:"red",
+        color:"#9B00FF",
         opacity:.7
     },
     textInput:{
@@ -186,6 +189,6 @@ const styles = StyleSheet.create({
         textAlign:"center",
         color:"white",
         fontSize:20,
-        opacity:.9
+        // opacity:.9
     }
 })

@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Swiper from "react-native-deck-swiper"
 import { onSnapshot,doc, collection, snapshotEqual, setDoc,getDocs,query,where, serverTimestamp ,getDoc} from 'firebase/firestore';
 import generateId from '../lib/generateId';
+import { Ionicons, Feather, Octicons} from '@expo/vector-icons';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -112,11 +113,12 @@ const HomeScreen = () => {
             </TouchableOpacity>
             
             <TouchableOpacity onPress={()=> navigation.navigate("Modal")}>
-                <Image style={styles.appLogo} source={require('../assets/TinderLogo.png')}/>
+                <Image style={styles.appLogo} source={require('../assets/GlowUpLogo6.png')}/>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.chatLogoContainer} onPress={() => navigation.navigate('Chat')}>
-                <Image style={styles.chatLogo} source={require('../assets/chatLogo.png')}/>
+                {/* <Image style={styles.chatLogo} source={require('../assets/chatLogo.png')}/> */}
+                <Ionicons name="chatbox-ellipses" size={40} color="#9B00FF"/>
             </TouchableOpacity>
         </View>
         {/*End of Header*/}
@@ -183,24 +185,33 @@ const HomeScreen = () => {
                     <View style ={[styles.blankCard,styles.shadow]}>
                         <Text style={styles.blankCardText}>No more profiles</Text>
                         <Image style={styles.blankCardImage} height={100} width={100} source={{uri:"https://links.papareact.com/6gb"}}/>
+                        
                     </View>
                 ) }
             />
         </View>
         {/*End of Cards*/}
         <View style={styles.footerContainer}>
-            <TouchableOpacity 
-            style={styles.footerNoContainer}
-            onPress={() => swipeRef.current.swipeLeft()}
-            >
-                <Image style={styles.footerImage} source={require('../assets/closed.png')}/>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            style={styles.footerYesContainer}
-            onPress={() => swipeRef.current.swipeRight()}
-            >
-                <Image style={styles.footerImage} source={require('../assets/checked.png')}/>
-            </TouchableOpacity>
+            
+            <Octicons  name="chevron-left" size={40} color="#9B00FF" style={{ top: -19 }} />
+            <View style={styles.footerButtonContainer}>
+                <TouchableOpacity 
+                style={styles.footerNoContainer}
+                onPress={() => swipeRef.current.swipeLeft()}
+                >
+                    <Feather name="x" size={80} color="#9B00FF"/>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={styles.footerYesContainer}
+                onPress={() => swipeRef.current.swipeRight()}
+                >
+                    <Feather name="check" size={80} color="#9B00FF"/>
+                </TouchableOpacity>
+            </View>
+
+
+        <Octicons  name="chevron-right" size={40} color="#9B00FF" style={{ top: -19 }} />
+
         </View>
     </SafeAreaView>
     )
@@ -211,8 +222,7 @@ export default HomeScreen
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        //justifyContent:'center',
-        //alignItems:'center'
+        backgroundColor: 'white',
     },
     button:{
         backgroundColor: colors.primary,
@@ -240,11 +250,12 @@ const styles = StyleSheet.create({
     },
     appLogo:{
         height:50,
-        width:50
+        width:150
     },
     header:{
         alignItems:'center',
-        position:'relative'
+        position:'relative',
+        color:'white'
     },
     chatLogo:{
         resizeMode:'contain',
@@ -263,7 +274,7 @@ const styles = StyleSheet.create({
         height:"75%"
     },
     card:{
-        backgroundColor:"white",
+        backgroundColor:"purple",
         height: "75%",
         borderRadius: 50/2,
         position:"relative"
@@ -311,9 +322,15 @@ const styles = StyleSheet.create({
     },
     footerContainer:{
         flexDirection:'row',
-        justifyContent:"space-evenly",
-        height:"15%",
+        justifyContent:"center",
+        //height:"15%",
         alignItems:"flex-end"
+    },
+    footerButtonContainer:{
+        flexDirection:'row',
+        justifyContent:"space-evenly",
+        // height:"15%",
+        alignItems:"flex-center"
     },
     footerImage:{
         height: "60%",
@@ -326,8 +343,9 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         borderRadius:80/2,
-        backgroundColor:"red",
-        opacity:.7
+        // backgroundColor:"red",
+        opacity:.7,
+        marginRight:40
     },
     footerYesContainer:{
         height: 80,
@@ -335,12 +353,13 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         borderRadius:80/2,
-        backgroundColor:"green",
-        opacity:.7
+        backgroundColor:"transparent",
+        opacity:.7,
+        marginLeft:40
     },
     blankCard:{
         position:"relative",
-        backgroundColor:"white",
+        backgroundColor:"#9B00FF",
         height:"75%",
         borderRadius: 50/2,
         justifyContent:"center",
@@ -352,6 +371,8 @@ const styles = StyleSheet.create({
     },
     blankCardText:{
         fontWeight:"bold",
-        padding:20
+        padding:40,
+        color:'white',
+        fontSize:20
     }
 })

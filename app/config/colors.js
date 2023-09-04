@@ -4,4 +4,5 @@ export default{
     primary : "#0081A7",
     secondary: "#00AFB9",
     accent: "#F07167",
+    Purple: "#9B00FF"
 };

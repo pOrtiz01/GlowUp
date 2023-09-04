@@ -47,7 +47,7 @@ const LoginScreen = () => {
         <ImageBackground 
         resizeMode="cover"
         style={styles.backgroundImage} 
-        source={{uri: "https://tinder.com/static/tinder.png"}}> 
+        source={require('../assets/GlowUpWelcomeBackGround2.png')}>
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Email"
@@ -66,7 +66,7 @@ const LoginScreen = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={handleLogin}
-                    style={[styles.button]}
+                    style={[styles.button,styles.buttonOutline]}
                     >
                         <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
@@ -74,7 +74,7 @@ const LoginScreen = () => {
                     onPress={handleSignup}
                     style={[styles.button,styles.buttonOutline]}
                     >
-                        <Text style={styles.buttonOutlineText}>Register</Text>
+                        <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     },
     inputContainer:{
         width:'80%',
-        marginTop:40
+        marginTop:60
     },
     input:{
         backgroundColor: 'white',
@@ -105,10 +105,10 @@ const styles = StyleSheet.create({
         width: '60%',
         justifyContent: 'center',
         alignItems: 'cernter',
-        marginTop: 40,
+        marginTop: 15,
     },
     button:{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.Purple,
         width:'100%',
         padding:15,
         borderRadius:10,
@@ -117,19 +117,16 @@ const styles = StyleSheet.create({
     buttonOutline:{
         backgroundColor: 'white',
         marginTop:5,
-        borderColor:colors.primary,
+        borderColor:colors.Purple,
         borderWidth:2,
     },
+
     buttonText:{
-        color: 'white',
+        color: colors.Purple,
         fontWeight: '700',
         fontSize:16,
     },
-    buttonOutlineText:{
-        color: colors.primary,
-        fontWeight: '700',
-        fontSize:16,
-    },
+   
     backgroundImage:{
         flex:1,
         justifyContent: 'flex-top',
