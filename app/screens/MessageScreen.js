@@ -1,6 +1,6 @@
 import { Button, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Keyboard, FlatList } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
-import Header from '../components/Header'
+import Header from '../components/ChatHeader'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { auth, db } from '../../firebase';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
